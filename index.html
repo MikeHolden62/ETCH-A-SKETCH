@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>ETCH-A-SKETCH</title>
+    <link href="cssreset.css" rel="stylesheet" type="text/css" media="all">
+    <link href="style.css" rel="stylesheet" type="text/css" media="all">
+</head>
+
+<header>
+</header>
+
+<body>
+    <label for="no_of_boxes">Number of Boxes Across: </label>
+    <input id="no_of_boxes" type="number" value="16">
+    <button id="reset">Reset</button>
+
+    <div class="container"></div>
+</body>
+
+<script>
+
+    addgrid();
+
+
+    // Set up event listener for the reset button
+    const reset = document.querySelector('#reset');
+
+    reset.addEventListener('click', function () {
+        addgrid();
+    });
+
+    // Function to add the grid according to the entered number of boxes
+    function addgrid() {
+
+        // Remove any existing boxes first
+        let boxes = document.querySelectorAll('.square');
+        boxes.forEach(box => box.parentNode.removeChild(box));
+
+        // Calculate the size of the box based on value input
+        const no_of_boxes = document.querySelector('#no_of_boxes');
+        let no_of_squares = no_of_boxes.value;
+        let grid_size = 700 / no_of_squares;
+
+        // Set the number of columns in the container via CSS grid-template-columns
+        let gridTemplateColumns = "auto";
+
+        for (let i = 1; i < no_of_squares; i++) {
+            gridTemplateColumns = gridTemplateColumns + " auto";
+        }
+
+        const container = document.querySelector('.container');
+        container.style.gridTemplateColumns = gridTemplateColumns;
+
+        // Create the grid of boxes
+        for (let d = 0; d < no_of_squares; d++) {
+
+            for (let i = 0; i < no_of_squares; i++) {
+                const square = document.createElement('div');
+                square.className = "square";
+                let size = grid_size + 'px';
+                square.style.height = size;
+                square.style.width = size;
+                container.appendChild(square);
+            }
+
+        }
+
+        // Add an event listeners for each square in the grid
+        boxes = document.querySelectorAll('.square');
+
+        // Event listener if mouse enters box with button pressed
+        boxes.forEach(box => box.addEventListener("mouseenter", e => {
+            if (e.which == 1) {
+                box.classList.add("on");
+            }
+        }));
+
+        // Event listener if mouse button pressed inside box
+        boxes.forEach(box => box.addEventListener("mousedown", e => {
+            if (e.which == 1) {
+                box.classList.add("on");
+            }
+        }));
+
+    }
+
+</script>
+
+</html>
