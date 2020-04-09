@@ -11,16 +11,23 @@
 <header>
 </header>
 
-<body>
-    <label for="no_of_boxes">Number of Boxes Across: </label>
+<body oncontextmenu="return false;">
+    <label for="no_of_boxes">Number of Boxes Across:</label>
     <input id="no_of_boxes" type="number" value="16">
     <button id="reset">Reset</button>
+    <button id="clear">Clear</button>
+    <label for="color">Colour:</label>
+    <input type="color" id="color" name="color" value="#ff0000">
 
     <div class="container"></div>
 </body>
 
 <script>
 
+    // Get a reference to the container as used in several places
+    const container = document.querySelector('.container');
+
+    // Set up the initial grid
     addgrid();
 
 
@@ -31,7 +38,15 @@
         addgrid();
     });
 
-    // Function to add the grid according to the entered number of boxes
+    // Set up event listener for the clear button
+    const clear = document.querySelector('#clear');
+
+    clear.addEventListener('click', function () {
+        let boxes = document.querySelectorAll('.square');
+        boxes.forEach(box => box.style.backgroundColor = container.style.backgroundColor);
+    });
+
+    // Function to set up the grid according to the entered number of boxes
     function addgrid() {
 
         // Remove any existing boxes first
@@ -41,16 +56,19 @@
         // Calculate the size of the box based on value input
         const no_of_boxes = document.querySelector('#no_of_boxes');
         let no_of_squares = no_of_boxes.value;
+        if (no_of_squares > 200) {
+            no_of_squares = 200;
+            no_of_boxes.value = 200;
+        }
         let grid_size = 700 / no_of_squares;
 
-        // Set the number of columns in the container via CSS grid-template-columns
+        // Set up the columns required in the container via CSS grid-template-columns
         let gridTemplateColumns = "auto";
 
         for (let i = 1; i < no_of_squares; i++) {
             gridTemplateColumns = gridTemplateColumns + " auto";
         }
 
-        const container = document.querySelector('.container');
         container.style.gridTemplateColumns = gridTemplateColumns;
 
         // Create the grid of boxes
@@ -67,20 +85,26 @@
 
         }
 
-        // Add an event listeners for each square in the grid
+        // Add an event listener for each square in the grid
         boxes = document.querySelectorAll('.square');
 
         // Event listener if mouse enters box with button pressed
         boxes.forEach(box => box.addEventListener("mouseenter", e => {
             if (e.which == 1) {
-                box.classList.add("on");
+                box.style.backgroundColor = document.getElementById("color").value;
+            }
+            if (e.which == 3) {
+                box.style.backgroundColor = container.style.backgroundColor;
             }
         }));
 
         // Event listener if mouse button pressed inside box
         boxes.forEach(box => box.addEventListener("mousedown", e => {
             if (e.which == 1) {
-                box.classList.add("on");
+                box.style.backgroundColor = document.getElementById("color").value;
+            }
+            if (e.which == 3) {
+                box.style.backgroundColor = container.style.backgroundColor;
             }
         }));
 
